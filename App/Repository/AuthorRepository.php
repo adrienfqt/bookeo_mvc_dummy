@@ -24,10 +24,16 @@ class AuthorRepository extends Repository
 
     public function findAll(): array
     {
+        $query = $this->pdo->prepare("SELECT * FROM author ORDER BY id ASC");
+        $query->execute();
+        $authors = $query->fetchAll($this->pdo::FETCH_ASSOC);
+
         $authorsArray = [];
-        //@todo coder cette partie
-
-
+        if (!empty($authors)) {
+            foreach($authors as $author) {
+                $authorsArray[] = Author::createAndHydrate($author);
+            }
+        }
         return $authorsArray;
     }
 }

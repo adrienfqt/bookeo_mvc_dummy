@@ -8,8 +8,7 @@ require_once _TEMPLATEPATH_ . '\header.php';
 
 <div class="row align-items-start g-5 py-5 my-5 bg-body-tertiary">
     <div class="col-10 col-sm-8 col-lg-4">
-        <img src="<?php if($book->getImage() == null){echo _ASSETS_IMAGES_FOLDER_."default-book.jpg";}else{
-            echo _BOOKS_IMAGES_FOLDER_.$book->getImage();}?>" class="d-block mx-lg-auto img-fluid" alt="Zaï Zaï Zaï Zaï">
+        <img src="<?php echo $book->getImagePath() ?>" class="d-block mx-lg-auto img-fluid" alt="Zaï Zaï Zaï Zaï">
     </div>
     <div class="col-lg-4">
         <h1 class="display-5 fw-bold lh-1 mb-3"><?= $book->getTitle(); ?></h1>

@@ -158,51 +158,41 @@ class BookController extends Controller
                 }
             }
 
-            // @todo Récupération des types
-            
+            $typeRepo = new TypeRepository();
+            $types = $typeRepo->findAll();
 
-            // @todo Récupération des auteurs
-        
+            $authorRepo = new AuthorRepository();
+            $authors = $authorRepo->findAll();
 
             if (isset($_POST['saveBook'])) {
-                //@todo envoyer les données post à la méthode hydrate de l'objet $book
-                
-
-                //@todo appeler la méthode validate de l'objet book pour récupérer les erreurs (titre vide)
-                
-
+                $book = Book::createAndHydrate($_POST);
+                $errors = $book->validate();
                 // Si pas d'erreur on peut traiter l'upload de fichier
                 if (empty($errors)) {
                     $fileErrors = [];
                     // On lance l'upload de fichier
                     if (isset($_FILES['file']['tmp_name']) && $_FILES['file']['tmp_name'] !== '') {
-                        //@todo appeler la méthode static uploadImage de la classe FileTools et stocker le résultat dans $res
-                        
+                        $res = FileTools::uploadImage(_BOOKS_IMAGES_FOLDER_,$_FILES['file']);
                         if (empty($res['errors'])) {
-                            //@todo décommenter cette ligne
-                            //$book->setImage($res['fileName']);
+                            $book->setImage($res['fileName']);
                         } else {
                             $fileErrors = $res['errors'];
                         }
                     }
                     if (empty($fileErrors)) {
-                        // @todo si pas d'erreur alors on appelle persit de bookRepository en passant $book
-
-
-                        // @todo On redirige vers la page du livre (avec header location)
-                        
+                        $bookRepository->persist($book);
+                        header("Location: index.php?controller=book&action=show&id=".$book->getId());
                     } else {
                         $errors = array_merge($errors, $fileErrors);
                     }
                 }
             }
-
             $this->render('book/add_edit', [
                 'book' => $book,
-                'types' => '',
-                'authors' => '',
+                'types' => $types,
+                'authors' => $authors,
                 'pageTitle' => 'Ajouter un livre',
-                'errors' => ''
+                'errors' => $errors
             ]);
         } catch (\Exception $e) {
             $this->render('errors/default', [
@@ -213,7 +203,6 @@ class BookController extends Controller
 
     protected function list()
     {
-
         $bookRepository = new BookRepository;
 
         // On récupère la page courante, si page de page on met à 1

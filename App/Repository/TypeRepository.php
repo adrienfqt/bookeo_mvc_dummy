@@ -32,7 +32,6 @@ class TypeRepository extends Repository
         if (!empty($types)) {
             foreach($types as $type) {
                 $typesArray[] = Type::createAndHydrate($type);
-
             }
         }
 
