@@ -40,13 +40,20 @@ class UserController extends Controller
             $user = new User();
 
             if (isset($_POST['saveUser'])) {
+                $user = User::createAndHydrate($_POST);
+                $errors = $user->validate();
                 //@todo gérer l'inscription utilisateur
+                if (empty($errors)){
+                    $userRepo = new UserRepository();
+                    $userRepo->persist($user);
+                    header("Location: index.php?controller=auth&action=login");
+                }
             }
 
             $this->render('user/add_edit', [
-                'user' => '',
+                'user' => $user,
                 'pageTitle' => 'Inscription',
-                'errors' => ''
+                'errors' => $errors
             ]);
 
         } catch (\Exception $e) {
