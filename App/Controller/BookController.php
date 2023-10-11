@@ -212,6 +212,9 @@ class BookController extends Controller
             $page = 1;
         }
 
+        $totalBooks = $bookRepository->count();
+        $totalPages = ceil($totalBooks / _ITEM_PER_PAGE_);
+        $books = $bookRepository->findAll(_ITEM_PER_PAGE_,$page);
         //@todo récupérer les tous les livres (avec pagination plus tard)
 
         //@todo pour la pagination, on a besoin de connaitre le nombre total de livres
@@ -220,9 +223,9 @@ class BookController extends Controller
 
 
         $this->render('book/list', [
-            'books' => '',
-            'totalPages' => '',
-            'page' => '',
+            'books' => $books,
+            'totalPages' => $totalPages,
+            'page' => $page,
         ]);
     }
 
