@@ -66,6 +66,10 @@ class BookController extends Controller
                 $book = $bookRepository->findOneById($id);
 
                 if ($book) {
+                    $commentRepository = new CommentRepository();
+                    $commentaire = new Comment();
+                    $commentaire->setId(User::getCurrentUserId());
+                    $commentaire->setBookId($id);
                     //@todo créer une nouvelle instance de CommentRepository
                     //@todo Créer une nouvelle instance de commentaire en settant le book id et l'id de l'utilisateur connecté (User::getCurrentUserId())
                     // $comment
