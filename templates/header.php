@@ -38,6 +38,9 @@ use App\Tools\NavigationTools;
                 <?php if (User::isLogged() && User::isAdmin()) { ?>
                     <li><a href="index.php?controller=book&action=add" class="nav-link px-2 <?= NavigationTools::addActiveClass('book', 'add') ?>">Ajouter un livre</a></li>
                 <?php } ?>
+                <?php if (User::isLogged() && User::isAdmin()) { ?>
+                    <li><a href="index.php?controller=author&action=index" class="nav-link px-2 <?= NavigationTools::addActiveClass('author', 'index') ?>">Gérer les auteurs</a></li>
+                <?php } ?>
             </ul>
 
             <div class="col-md-3 text-end">

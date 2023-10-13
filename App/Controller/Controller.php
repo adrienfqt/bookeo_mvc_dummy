@@ -28,6 +28,10 @@ class Controller
                         $controller = new UserController();
                         $controller->route();
                         break;
+                    case 'author':
+                        $controller = new AuthorController();
+                        $controller->route();
+                        break;
                     default:
                         throw new \Exception("Le controleur n'existe pas");
                         break;
