@@ -12,7 +12,7 @@ class CommentRepository extends Repository
     public function findAllByBookId(int $book_id):array
     {
         $query = $this->pdo->prepare("SELECT * FROM comment WHERE book_id = :book_id ORDER BY id ASC");
-        $query->bindParam(':book_id', $book_id, $this->pdo::PARAM_STR);
+        $query->bindParam(':book_id', $book_id, $this->pdo::PARAM_INT);
         $query->execute();
         $comments = $query->fetchAll($this->pdo::FETCH_ASSOC);
 
@@ -30,11 +30,8 @@ class CommentRepository extends Repository
                     
                 }
             }
-    
         }
-
         return $commentsArray;
-
     }
 
     public function persist(Comment $comment)

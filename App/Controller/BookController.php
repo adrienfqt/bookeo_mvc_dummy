@@ -78,6 +78,9 @@ class BookController extends Controller
                     if (isset($_POST['saveComment'])) {
                         if (!User::isLogged()) {
                             throw new \Exception("Accès refusé");
+                        }else{
+                            $commentaire = Comment::createAndHydrate($_POST);
+                            $errors = $commentaire->validate();
                         }
                         //@todo appeler la méthode hydrate du l'objet comment en passant le tableau $_POST
 
@@ -85,22 +88,24 @@ class BookController extends Controller
 
                         
                         if (empty($errors)) {
+                            $commentRepository->persist($commentaire);
                             // @todo si il n'y a pas d'erreur, alors appeler la méthode persist de l'objet commentRepository en passant $comment
-                            
                         }
                     }
 
                     // @todo récupérer les commentaires existants
+                    $comments = $commentRepository->findAllByBookId($id);
                     
 
                     //@todo remplacer petit à petit les valeurs 
                     $this->render('book/show', [
                         'book' => $book,
-                        'comments' => '',
-                        'newComment' => '',
+                        'comments' => $comments,
+                        'newComment' => $commentaire,
                         'rating' => '',
                         'averageRate' => '',
-                        'errors' => '',
+                        'errors' => $errors,
+                        'user' => User::getCurrentUserId()
                     ]);
                 } else {
                     $this->render('errors/default', [
@@ -215,12 +220,6 @@ class BookController extends Controller
         $totalBooks = $bookRepository->count();
         $totalPages = ceil($totalBooks / _ITEM_PER_PAGE_);
         $books = $bookRepository->findAll(_ITEM_PER_PAGE_,$page);
-        //@todo récupérer les tous les livres (avec pagination plus tard)
-
-        //@todo pour la pagination, on a besoin de connaitre le nombre total de livres
-
-        //@todo pour la pagination on a besoin de connaitre le nombre de pages
-
 
         $this->render('book/list', [
             'books' => $books,
