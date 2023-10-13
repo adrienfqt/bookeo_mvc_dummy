@@ -1,3 +1,6 @@
+<?php
+/** @var  App\Entity\Book $book */ /** @var $user */
+?>
 <div class="card">
     <div class="card-body p-4">
 
@@ -46,10 +49,10 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="book_id" value="82">
-                <input type="hidden" name="user_id" value="2">
+                <input type="hidden" name="book_id" value="<?php echo $book->getId() ?>">
+                <input type="hidden" name="user_id" value="<?php echo $user ?>">
 
-                <input type="hidden" name="id" value="8">
+                <input type="hidden" name="id" value="10">
 
 
 

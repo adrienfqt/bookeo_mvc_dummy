@@ -3,7 +3,7 @@
 use App\Entity\User;
 
 require_once _TEMPLATEPATH_ . '\header.php';
-/** @var  App\Entity\Book $book */ /** @var $comments */ /** @var $user */
+/** @var  App\Entity\Book $book */ /** @var $comments */ /** @var $user */ /** @var $rating */ /** @var $errors */ /** @var $averageRate */
 ?>
 
 <div class="row align-items-start g-5 py-5 my-5 bg-body-tertiary">

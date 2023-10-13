@@ -1,5 +1,5 @@
 <?php
-/** @var $comments */ /** @var  App\Entity\Book $book */ /** @var $user */ var_dump($user);
+/** @var $comments */ /** @var  App\Entity\Book $book */ /** @var $user */
 ?>
 
 <div class="col-md-12 col-lg-8 col-xl-8">

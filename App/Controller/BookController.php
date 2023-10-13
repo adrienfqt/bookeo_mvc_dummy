@@ -70,11 +70,8 @@ class BookController extends Controller
                     $commentaire = new Comment();
                     $commentaire->setId(User::getCurrentUserId());
                     $commentaire->setBookId($id);
-                    //@todo créer une nouvelle instance de CommentRepository
-                    //@todo Créer une nouvelle instance de commentaire en settant le book id et l'id de l'utilisateur connecté (User::getCurrentUserId())
-                    // $comment
 
-
+                    $rate = null;
                     if (isset($_POST['saveComment'])) {
                         if (!User::isLogged()) {
                             throw new \Exception("Accès refusé");
@@ -82,28 +79,33 @@ class BookController extends Controller
                             $commentaire = Comment::createAndHydrate($_POST);
                             $errors = $commentaire->validate();
                         }
-                        //@todo appeler la méthode hydrate du l'objet comment en passant le tableau $_POST
-
-                        //@todo verifier que le commentaire est valide en appelant la commande validate
-
-                        
                         if (empty($errors)) {
                             $commentRepository->persist($commentaire);
-                            // @todo si il n'y a pas d'erreur, alors appeler la méthode persist de l'objet commentRepository en passant $comment
                         }
                     }
 
-                    // @todo récupérer les commentaires existants
                     $comments = $commentRepository->findAllByBookId($id);
-                    
+                    $ratingRepo = new RatingRepository();
 
-                    //@todo remplacer petit à petit les valeurs 
+                    $average = $ratingRepo->findAverageByBookId($id);
+                    if (isset($_POST['saveRating'])) {
+                        if (!User::isLogged()) {
+                            throw new \Exception("Accès refusé");
+                        }else{
+                            $rate = Rating::createAndHydrate($_POST);
+                            $errors = $commentaire->validate();
+
+                        }if (empty($errors)) {
+                            $ratingRepo->persist($rate);
+                        }
+                    }
+
                     $this->render('book/show', [
                         'book' => $book,
                         'comments' => $comments,
                         'newComment' => $commentaire,
-                        'rating' => '',
-                        'averageRate' => '',
+                        'rating' => $rate,
+                        'averageRate' => $average,
                         'errors' => $errors,
                         'user' => User::getCurrentUserId()
                     ]);
